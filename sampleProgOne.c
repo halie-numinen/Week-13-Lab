@@ -1,5 +1,4 @@
-#include <stdio.h>  
-#include <stdlib.h>  
+// where did this come from?e <stdlib.h>  
 #include <fcntl.h>  
 #include <sys/types.h>  
 #include <unistd.h>  
@@ -28,6 +27,11 @@ int main(int argc, char *argv[]) {
  
    write (fd, myBuffer, SIZE-2); 
    sleep (10); 
+   fileLock.l_type = F_UNLCK;
+   if (fcntl (fd, F_SETLK, &fileLock) < 0) {
+       perror ("Unable to set file unlock");
+       exit (1);
+   }
    close(fd); 
    return 0;  
 } 
