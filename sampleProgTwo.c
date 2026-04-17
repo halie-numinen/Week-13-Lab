@@ -18,23 +18,19 @@ int main(int argc, char *argv[]) {
       perror ("there is");  
       exit (1);  
    } 
-   fileLock.l_type = F_WRLCK;  
+   fileLock.l_type = F_WRLCK; // waiting
    fileLock.l_whence = SEEK_SET;  
    fileLock.l_start = 0;  
    fileLock.l_len = 0;  
-   if (fcntl (fd, F_SETLK, &fileLock) < 0) {  
-      perror ("Unable to set file lock");  
+   if (fcntl (fd, F_SETLKW, &fileLock) < 0) {  
+      perror ("Can't acquire lock");  
       exit (1);  
    } 
-   printf("Locking file\n");
-   write (fd, myBuffer, SIZE-2); 
-   sleep (10); 
-   fileLock.l_type = F_UNLCK;
-   printf("Done sleeping, now unlocking the file\n");
-   if (fcntl (fd, F_SETLK, &fileLock) < 0) {
-       perror ("Unable to set file unlock");
-       exit (1);
-   }
+   printf("Done waiting. Acquired lock.\n");
+//    write (fd, myBuffer, SIZE-2); 
+//    sleep (10); 
+//    fileLock.l_type = F_UNLCK;
+   
    close(fd); 
    return 0;  
 } 
